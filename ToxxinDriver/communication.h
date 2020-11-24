@@ -1,0 +1,57 @@
+#pragma once
+#pragma warning (disable : 4047 4024 4022)
+
+#ifndef COMMUNICATION_H
+#define COMMUNICATION_H
+
+#include <ntifs.h>
+
+// This is where we define the IO control codes for our driver
+// https://docs.microsoft.com/en-us/windows-hardware/drivers/kernel/defining-i-o-control-codes
+//
+
+// Tested
+#define IO_SET_IMAGE_NAME_STRING CTL_CODE(FILE_DEVICE_UNKNOWN, 0x800, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
+#define IO_GET_CLIENT_ADDRESS CTL_CODE(FILE_DEVICE_UNKNOWN, 0x801, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
+#define IO_GET_PROCESS_ID CTL_CODE(FILE_DEVICE_UNKNOWN, 0x802, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
+
+// Not Tested
+#define IO_READ_REQUEST CTL_CODE(FILE_DEVICE_UNKNOWN, 0x803, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
+#define IO_WRITE_REQUEST CTL_CODE(FILE_DEVICE_UNKNOWN, 0x804, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
+#define IO_PATTERN_SCAN CTL_CODE(FILE_DEVICE_UNKNOWN, 0x805, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
+
+
+NTSTATUS IoControl(PDEVICE_OBJECT DeviceObject, PIRP Irp);
+
+NTSTATUS CloseCall(PDEVICE_OBJECT DeviceObject, PIRP Irp);
+
+NTSTATUS CreateCall(PDEVICE_OBJECT DeviceObject, PIRP Irp);
+
+typedef struct _KERNEL_READ_REQUEST
+{
+	ULONG ProcessId;
+	ULONG Address;
+	PVOID pBuff;
+	ULONG Size;
+	
+} KERNEL_READ_REQUEST, * PKERNEL_READ_REQUEST;
+
+typedef struct _KERNEL_WRITE_REQUEST
+{
+	ULONG ProcessId;
+	ULONG Address;
+	PVOID pBuff;
+	ULONG Size;
+
+} KERNEL_WRITE_REQUEST, * PKERNEL_WRITE_REQUEST;
+
+typedef struct _SIGNATURE_REQUEST
+{
+	ULONG ProcessId;
+	PCHAR Signature;
+	PCHAR Mask;
+	PULONG addressBuff;
+	
+} SIGNATURE_REQUEST, * PSIGNATURE_REQUEST;
+
+#endif
