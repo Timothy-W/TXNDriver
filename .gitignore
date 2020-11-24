@@ -450,3 +450,9 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+
+ToxxinDriverController/*
+ToxxinDriver/Debug/*
+ToxxinDriver/Release/*
+ToxxinDriver/x64/*
